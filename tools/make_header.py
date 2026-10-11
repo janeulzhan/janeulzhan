@@ -14,7 +14,13 @@ Design constraints, all of them load-bearing:
     `default-src 'none'` plus `sandbox` on raw.githubusercontent.com
   * system monospace plus textLength, so no font is ever fetched
   * every default CSS state is the FINISHED state and keyframes animate from
-    the start, so frame zero is already the intended artwork
+    the start, so frame zero is already the intended artwork. The name does
+    not animate at all: `animation-fill-mode: both` back-fills the `from`
+    keyframe for the whole delay, so a delayed reveal leaves the text hidden
+    until it fires, and any renderer that shows a single frame rather than
+    playing the timeline shows nothing. A header whose job is to say whose
+    profile this is cannot be blank in those cases, so the wordmark is static
+    and only the decoration animates.
   * prefers-reduced-motion: reduce disables all animation
   * byte-deterministic output, which CI asserts by regenerating and diffing
 """
@@ -134,17 +140,17 @@ def build():
     add("<style>")
     add(".c{opacity:1}")
     add(".p{stroke-dashoffset:0}")
-    add(".t{clip-path:inset(0 0 0 0)}")
     add("@keyframes f{from{opacity:0}to{opacity:1}}")
     add("@keyframes d{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}")
-    add("@keyframes y{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}")
+    # Only the matrix and the traceback animate. The wordmark is deliberately
+    # left alone: a typed reveal needs the text to start hidden, and a hidden
+    # start means the name is missing from frame zero and from every static
+    # render. The decoration can afford to arrive late, the name cannot.
     add(".c{animation:f .45s ease-out both}")
     add(".p{animation:d 1.1s 1.25s ease-in-out both}")
-    add(".t{animation:y .7s 2.1s steps(22,end) both}")
-    add(".t2{animation-delay:2.55s}")
     for k in range(rows + cols - 1):
         add(f".w{k}{{animation-delay:{k * 0.035:.3f}s}}")
-    add("@media(prefers-reduced-motion:reduce){.c,.p,.t{animation:none}}")
+    add("@media(prefers-reduced-motion:reduce){.c,.p{animation:none}}")
     add("</style>")
 
     add('<g>')
