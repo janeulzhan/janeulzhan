@@ -10,10 +10,14 @@ Computed by tools/make_header.py, not drawn by hand.
 <style>
 .c{opacity:1}
 .p{stroke-dashoffset:0}
+.t{clip-path:inset(0 0 0 0)}
 @keyframes f{from{opacity:0}to{opacity:1}}
 @keyframes d{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+@keyframes y{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
 .c{animation:f .45s ease-out both}
 .p{animation:d 1.1s 1.25s ease-in-out both}
+.t{animation:y .7s 0.9s steps(22,end) both}
+.t2{animation-delay:1.25s}
 .w0{animation-delay:0.000s}
 .w1{animation-delay:0.035s}
 .w2{animation-delay:0.070s}
@@ -46,7 +50,7 @@ Computed by tools/make_header.py, not drawn by hand.
 .w29{animation-delay:1.015s}
 .w30{animation-delay:1.050s}
 .w31{animation-delay:1.085s}
-@media(prefers-reduced-motion:reduce){.c,.p{animation:none}}
+@media(prefers-reduced-motion:reduce){.c,.p,.t{animation:none}}
 </style>
 <g>
 <rect class="c w0" x="40" y="44" width="14" height="14" rx="2" fill="#4f8f9c" fill-opacity="0.55"/>
@@ -267,6 +271,6 @@ Computed by tools/make_header.py, not drawn by hand.
 <rect class="c w31" x="408" y="172" width="14" height="14" rx="2" fill="#4f8f9c" fill-opacity="0.55"/>
 </g>
 <path class="p" d="M47.0,51.0 L63.0,67.0 L79.0,83.0 L95.0,83.0 L111.0,99.0 L127.0,115.0 L143.0,131.0 L159.0,131.0 L175.0,131.0 L191.0,131.0 L207.0,131.0 L223.0,131.0 L239.0,131.0 L255.0,147.0 L271.0,163.0 L287.0,163.0 L303.0,163.0 L319.0,163.0 L335.0,163.0 L351.0,163.0 L367.0,163.0 L383.0,163.0 L399.0,163.0 L415.0,179.0" fill="none" stroke="#cf7a45" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" stroke-dasharray="1"/>
-<text class="t" x="486" y="104" font-family="ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,DejaVu Sans Mono,monospace" font-size="34" font-weight="600" fill="#7b8a9e" textLength="352" lengthAdjust="spacingAndGlyphs">ulzhan khamidolla</text>
-<text class="t t2" x="486" y="140" font-family="ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,DejaVu Sans Mono,monospace" font-size="30" fill="#7b8a9e" fill-opacity="0.75" textLength="330" lengthAdjust="spacingAndGlyphs">cs + mcb, berkeley '29</text>
+<text class="t" x="486" y="104" font-family="ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,DejaVu Sans Mono,monospace" font-size="30" font-weight="600" fill="#7b8a9e" textLength="310" lengthAdjust="spacingAndGlyphs">ulzhan khamidolla</text>
+<text class="t t2" x="486" y="140" font-family="ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,DejaVu Sans Mono,monospace" font-size="28" fill="#7b8a9e" fill-opacity="0.75" textLength="308" lengthAdjust="spacingAndGlyphs">cs + mcb, berkeley '29</text>
 </svg>

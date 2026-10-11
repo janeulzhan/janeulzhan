@@ -7,20 +7,20 @@ the name. The grid and the path are not decorative: both are computed here
 from a real alignment, so the picture is the algorithm it depicts.
 
 Design constraints, all of them load-bearing:
-  * 900x220 viewBox, so at a 360px phone (scale 0.40) 34px text lands at 13.6px
+  * 900x220 viewBox, so at a 360px phone (scale 0.40) 30px text lands at 12.0px
+    and the 28px subtitle at 11.2px, both above the 11px floor the lint enforces
   * transparent ground, so no theme detection is needed anywhere
   * CSS @keyframes only, permitted by `style-src 'unsafe-inline'`
   * no script, no url(), no @import, no data: URIs, all blocked by
     `default-src 'none'` plus `sandbox` on raw.githubusercontent.com
   * system monospace plus textLength, so no font is ever fetched
   * every default CSS state is the FINISHED state and keyframes animate from
-    the start, so frame zero is already the intended artwork. The name does
-    not animate at all: `animation-fill-mode: both` back-fills the `from`
-    keyframe for the whole delay, so a delayed reveal leaves the text hidden
-    until it fires, and any renderer that shows a single frame rather than
-    playing the timeline shows nothing. A header whose job is to say whose
-    profile this is cannot be blank in those cases, so the wordmark is static
-    and only the decoration animates.
+    the start, so frame zero is already the intended artwork
+  * the wordmark types in, but early. `animation-fill-mode: both` back-fills
+    the `from` keyframe for the whole delay, so the name is genuinely absent
+    until its animation fires, not merely un-animated. The delay is therefore
+    kept short enough that the name is readable almost immediately rather than
+    three seconds in.
   * prefers-reduced-motion: reduce disables all animation
   * byte-deterministic output, which CI asserts by regenerating and diffing
 """
@@ -42,6 +42,16 @@ C_CELL = "#6e7f99"
 C_FILL = "#4f8f9c"
 C_PATH = "#cf7a45"
 C_TEXT = "#7b8a9e"
+
+# Wordmark metrics. textLength is what actually sets the drawn width, since
+# lengthAdjust fits the glyph run to it regardless of which monospace face the
+# viewer happens to have, so the two move together.
+NAME_SIZE = 30
+NAME_LENGTH = 310
+SUB_SIZE = 28
+SUB_LENGTH = 308
+NAME_DELAY = 0.9
+SUB_DELAY = 1.25
 
 NAME = "ulzhan khamidolla"
 # What a screen reader announces. It carries the preferred name that the drawn
@@ -140,17 +150,21 @@ def build():
     add("<style>")
     add(".c{opacity:1}")
     add(".p{stroke-dashoffset:0}")
+    add(".t{clip-path:inset(0 0 0 0)}")
     add("@keyframes f{from{opacity:0}to{opacity:1}}")
     add("@keyframes d{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}")
-    # Only the matrix and the traceback animate. The wordmark is deliberately
-    # left alone: a typed reveal needs the text to start hidden, and a hidden
-    # start means the name is missing from frame zero and from every static
-    # render. The decoration can afford to arrive late, the name cannot.
+    add("@keyframes y{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}")
     add(".c{animation:f .45s ease-out both}")
     add(".p{animation:d 1.1s 1.25s ease-in-out both}")
+    # The name starts at 0.9s rather than 2.1s. With fill-mode both the text is
+    # not just unanimated during its delay, it is clipped to nothing, so every
+    # second of delay is a second with no name on the header. The traceback is
+    # still drawing underneath while the name types, which reads fine.
+    add(f".t{{animation:y .7s {NAME_DELAY}s steps(22,end) both}}")
+    add(f".t2{{animation-delay:{SUB_DELAY}s}}")
     for k in range(rows + cols - 1):
         add(f".w{k}{{animation-delay:{k * 0.035:.3f}s}}")
-    add("@media(prefers-reduced-motion:reduce){.c,.p{animation:none}}")
+    add("@media(prefers-reduced-motion:reduce){.c,.p,.t{animation:none}}")
     add("</style>")
 
     add('<g>')
@@ -173,12 +187,12 @@ def build():
 
     fam = ("ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,"
            "DejaVu Sans Mono,monospace")
-    add(f'<text class="t" x="486" y="104" font-family="{fam}" font-size="34" '
-        f'font-weight="600" fill="{C_TEXT}" textLength="352" '
+    add(f'<text class="t" x="486" y="104" font-family="{fam}" font-size="{NAME_SIZE}" '
+        f'font-weight="600" fill="{C_TEXT}" textLength="{NAME_LENGTH}" '
         f'lengthAdjust="spacingAndGlyphs">{NAME}</text>')
     add(f'<text class="t t2" x="486" y="140" font-family="{fam}" '
-        f'font-size="30" fill="{C_TEXT}" fill-opacity="0.75" '
-        f'textLength="330" lengthAdjust="spacingAndGlyphs">{SUB}</text>')
+        f'font-size="{SUB_SIZE}" fill="{C_TEXT}" fill-opacity="0.75" '
+        f'textLength="{SUB_LENGTH}" lengthAdjust="spacingAndGlyphs">{SUB}</text>')
 
     add("</svg>")
     return "\n".join(out) + "\n", (best, top, bot, cols, rows)
@@ -210,5 +224,5 @@ if __name__ == "__main__":
     print("\nmobile scaling:")
     for w in (390, 360):
         s = w / 900
-        print(f"  {w}px -> scale {s:.3f}; 34px -> {34 * s:.1f}px; "
+        print(f"  {w}px -> scale {s:.3f}; {NAME_SIZE}px -> {NAME_SIZE * s:.1f}px; "
               f"2.5px stroke -> {2.5 * s:.2f}px")
