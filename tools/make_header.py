@@ -38,6 +38,12 @@ C_PATH = "#cf7a45"
 C_TEXT = "#7b8a9e"
 
 NAME = "ulzhan khamidolla"
+# What a screen reader announces. It carries the preferred name that the drawn
+# wordmark leaves out, because the glyph run is width-fitted and adding four
+# characters to it would change the layout. Kept here rather than hand-edited
+# into header.svg so that the lint step, which regenerates and diffs, stays
+# able to do its job.
+ARIA_NAME = "ulzhan (jane) khamidolla"
 SUB = "cs + mcb, berkeley '29"
 
 
@@ -110,7 +116,7 @@ def build():
     add = out.append
     add('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" '
         'width="900" height="220" role="img" '
-        f'aria-label="{NAME}, {SUB}">')
+        f'aria-label="{ARIA_NAME}, {SUB}">')
 
     # The delight, for anyone who opens view-source: the picture is honest.
     # This lives in <desc> rather than a comment because the aligned strings
