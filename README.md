@@ -1,4 +1,4 @@
-![Ulzhan Khamidolla, CS and MCB, Berkeley 2029](header.svg)
+![Ulzhan (Jane) Khamidolla, CS and MCB, Berkeley 2029](header.svg)
 
 I build things where the hard part is the algorithm, usually somewhere between computer science and
 biology. Computer Science and Molecular and Cell Biology at UC Berkeley, class of 2029.
