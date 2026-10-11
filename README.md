@@ -17,14 +17,16 @@ within 1e-3 on four structures, and the JavaScript and Python versions are bit-i
 
 **[pikevm](https://github.com/janeulzhan/pikevm)**: A regex engine that matches in one
 left-to-right pass: Thompson NFA construction and a Pike VM with capture groups. On `^(a|aa)+$`
-against 41 characters, V8 does not finish inside two seconds and this answers in 0.005 ms. 999,940
-fuzzed pattern and input pairs agree with V8 on acceptance and on every capture span.
+against 41 characters, V8 does not finish inside two seconds and this answers in 0.005 ms. A
+million fuzzed pattern and input pairs agree with V8 on acceptance and on every capture span, with
+zero divergences; the only pairs excluded are the few dozen V8 itself cannot answer.
 [Live demo](https://janeulzhan.github.io/pikevm/).
 
 **[tinyvec](https://github.com/janeulzhan/tinyvec)**: An IVF plus product-quantization vector index
 built from k-means up, with asymmetric distance computation over precomputed lookup tables. On
-SIFT-small, recall@10 runs from 0.403 to 1.000 across the nprobe sweep and the codes compress 32x.
-The benchmark reports the case where numpy brute force wins.
+SIFT-small, recall@10 climbs from 0.403 to 0.724 on the quantized codes alone, and reaches 1.000
+once the top 100 candidates are rescored exactly. The codes compress 32x. The benchmark also
+reports the regime where numpy brute force beats it.
 
 **[hirsch](https://github.com/janeulzhan/hirsch)**: Optimal global alignment with affine gaps in
 linear space, combining Gotoh's recurrence with Hirschberg's divide and conquer. Same optimal score
